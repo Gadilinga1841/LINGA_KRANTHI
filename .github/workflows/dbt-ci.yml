@@ -1,0 +1,69 @@
+name: dbt CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dbt-ci:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Get the code from GitHub
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Python in GitHub Actions
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # 3. Install dbt
+      - name: Install dbt
+        run: |
+          python -m pip install --upgrade pip
+          pip install dbt-snowflake
+
+      # 4. Check dbt version
+      - name: Check dbt version
+        run: dbt --version
+
+      # 5. Create profiles.yml for CI
+      - name: Create profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml <<EOF
+          snowflake_project:
+            target: ci
+            outputs:
+              ci:
+                type: snowflake
+                account: QNNKJUC-DZ79857
+                user: KRANTHI
+                password: Manjunath321#@!
+                role: ACCOUNTADMIN
+                warehouse: my_wh
+                database: mydb
+                schema: mysc
+                threads: 4
+          EOF
+
+      # 6. Test Snowflake connection
+      - name: dbt debug
+        run: dbt debug
+
+      # 7. Install dbt packages
+      - name: dbt deps
+        run: dbt deps
+
+      # 8. Compile dbt project
+      - name: dbt compile
+        run: dbt compile
+
+      # 9. Build models and run tests
+      - name: dbt build
+        run: dbt build
