@@ -42,13 +42,13 @@ jobs:
             outputs:
               ci:
                 type: snowflake
-                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-                user: ${{ secrets.SNOWFLAKE_USER }}
-                password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-                role: ${{ secrets.SNOWFLAKE_ROLE }}
-                warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-                database: ${{ secrets.SNOWFLAKE_DATABASE }}
-                schema: CI
+                account: QNNKJUC-DZ79857
+                user: KRANTHI
+                password: Manjunath321#@!
+                role: ACCOUNTADMIN
+                warehouse: my_wh
+                database: mydb
+                schema: mysc
                 threads: 4
           EOF
 
